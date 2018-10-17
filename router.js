@@ -9,11 +9,15 @@ const c_topic = require('./controllers/c_topic');
 //2.获取router对象
 const router = express.Router();
 //渲染登录页面的请求
-router.get('/signin',c_user.showSignin);
-router.post('/signin',c_user.handleSignin);
-
-
-//渲染话题页面
-router.get('/',c_topic.showTopic);
-
+router
+    .get('/signin',c_user.showSignin)
+    .post('/signin',c_user.handleSignin)
+    //渲染话题页面
+    .get('/',c_topic.showTopic)
+    .get('/topic/create',c_topic.createTopic)
+    .post('/createTopic',c_topic.handleCreateTopic)
+    .get('/signout',c_user.handleSignout)
+    //动态路由  router.get('/固定标识/:参数名(可以随便起))
+    .get('/topic/:topicID',c_topic.showDetail);
+    //    /topic/{{$value.id}}
 module.exports = router;
