@@ -14,5 +14,25 @@ const checkEmail = function(email,callback) {
         callback (null,data);
     });
 };
+//验证昵称
+exports.checkNickname = (nickname,callback) => {
+    const sqlstr = 'SELECT * FROM `users` WHERE nickname=?';
+    db.query(sqlstr,nickname,(err,data) => {
+        if(err) {
+            return callback(err);
+        }
+        callback(null,data);
+    });
+}
+// 添加新用户
+exports.addUser = (body, callback) => {
+    const sqlstr = 'INSERT INTO `users` SET ?';
+    db.query(sqlstr, body, (err, data) => {
+        if (err) {
+            return callback(err);
+        }
+        callback(null, data);
+    });
+}
 
 exports.checkEmail = checkEmail;

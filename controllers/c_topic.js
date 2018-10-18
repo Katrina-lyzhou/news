@@ -72,7 +72,67 @@ exports.showDetail = (req,res) => {
         }
         // console.log(data);s
         res.render('topic/show.html',{
+            topic:data[0],
+            //为了将被点击的该话题的详情信息展示在页面中
+            sessionUserId:req.session.user.id
+        });
+    });
+}
+
+//提高项目性能的方法
+// 渲染话题编辑页面
+exports.showEdit = (req,res) => {
+    //让m_topic去操作数据库,返回结果
+    const topicID = req.params.topicID;
+    const body = req.boay;
+    //条件topicID查询数据并且修改
+    m_topic.findTopicByID (topicID,(err,data) => {
+        if (err) {
+            return res.send ({
+                code:500,
+                err:'服务器错了'
+            })
+        }
+        res.render('topic/edit.html', {
             topic:data[0]
         });
+    })
+}
+
+//处理编辑页面的表单请求
+exports.handleEditTopic = (req,res) => {
+    //1获取表单的数据
+    const body = req.body;
+    //2.获取话题的数据
+    const topicID = req.params.topicID;
+    //3.修改数据:根据topicID中哀悼要修改的数据  req.body
+    m_topic.updateTopicByID(topicID,body,(err,data) => {
+        if (err) {
+            return res.send({
+                code:500,
+                err:'服务器错误'
+            })
+        }
+        res.send({
+            code:200,
+            message:'编辑成功'
+        })
+    });
+}
+
+//删除话题
+exports.deleteTopic = (req,res) => {
+    const topicID = req.params.topicID;
+    m_topic.deleteTopicByID(topicID,(err,data) => {
+        if(err) {
+            return res.send({
+                code:500,
+                message:err.message
+            })
+        }
+        res.send({
+            code:200,
+            message:'删除成功'
+        })
     });
 }
